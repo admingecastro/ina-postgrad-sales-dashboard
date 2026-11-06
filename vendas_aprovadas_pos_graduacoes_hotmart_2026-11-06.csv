@@ -1,0 +1,43 @@
+﻿Data aprovação (BRT);Pós-graduação;Modalidade;Plano;Faturamento bruto (BRL);Taxa Hotmart (BRL);Líquido estimado após taxa (BRL);Meio de pagamento;Parcelas no checkout;Nº da recorrência
+2026-11-04 16:19;Neuropediatria;Produto cheio;Produto cheio;11976,48;1016,63;10959,85;CREDIT_CARD;12;
+2026-11-04 16:21;Neuropediatria;Recorrência (*R);Mensal 36x;447,00;46,74;400,26;CREDIT_CARD;1;1
+2026-11-04 17:11;Neuropediatria;Produto cheio;Produto cheio;15000,00;1416,50;13583,50;CREDIT_CARD;3;
+2026-11-04 17:24;Neuropediatria;Recorrência (*R);Mensal 36x;447,00;46,74;400,26;BILLET;1;1
+2026-11-04 17:59;Neuropediatria;Recorrência (*R);Mensal 36x;447,00;46,74;400,26;CREDIT_CARD;1;1
+2026-11-05 17:03;Neuropediatria;Recorrência (*R);Mensal 36x;675,00;69,32;605,68;CREDIT_CARD;1;1
+2026-11-05 17:56;Altas Habilidades/Superdotação e Dupla Excepcionalidade;Recorrência (*R);Mensal 12x;299,00;32,09;266,91;CREDIT_CARD;1;1
+2026-11-05 18:15;Neurociências e Autismo;Recorrência (*R);Mensal 12x;299,00;32,09;266,91;CREDIT_CARD;1;1
+2026-11-05 18:18;Neurociências da Aprendizagem e seus Transtornos;Produto cheio;Produto cheio;3233,64;276,31;2957,33;CREDIT_CARD;12;
+2026-11-05 18:28;Neurociências e Autismo;Recorrência (*R);Mensal 12x;299,00;32,09;266,91;CREDIT_CARD;1;1
+2026-11-05 18:32;Altas Habilidades/Superdotação e Dupla Excepcionalidade;Produto cheio;Produto cheio;3233,64;276,31;2957,33;CREDIT_CARD;12;
+2026-11-05 18:32;Análise do Comportamento Aplicada (ABA) ao TEA;Recorrência (*R);Mensal 12x;299,00;32,09;266,91;CREDIT_CARD;1;1
+2026-11-05 19:08;Neurociências da Aprendizagem e seus Transtornos;Produto cheio;Produto cheio;2700,00;269,79;2430,21;CREDIT_CARD;1;
+2026-11-05 19:29;Análise do Comportamento Aplicada (ABA) ao TEA;Produto cheio;Produto cheio;3233,64;276,31;2957,33;CREDIT_CARD;12;
+2026-11-05 19:31;Altas Habilidades/Superdotação e Dupla Excepcionalidade;Produto cheio;Produto cheio;2700,00;257,01;2442,99;CREDIT_CARD;3;
+2026-11-05 19:53;Neurociências e Autismo;Recorrência (*R);Trimestral;867,00;84,22;782,78;CREDIT_CARD;3;1
+2026-11-05 19:58;Neurociências e Autismo;Recorrência (*R);Trimestral;867,00;84,22;782,78;CREDIT_CARD;3;1
+2026-11-05 20:02;Neurociências e Autismo;Produto cheio;Produto cheio;900,00;37,59;862,41;CREDIT_CARD;3;
+2026-11-05 20:16;Altas Habilidades/Superdotação e Dupla Excepcionalidade;Produto cheio;Produto cheio;2700,00;257,01;2442,99;CREDIT_CARD;3;
+2026-11-05 20:18;Neurociências e Autismo;Produto cheio;Produto cheio;3233,64;110,36;3123,28;CREDIT_CARD;12;
+2026-11-05 20:23;Neurociências e Autismo;Recorrência (*R);Mensal 12x;299,00;32,09;266,91;CREDIT_CARD;1;1
+2026-11-05 20:25;Altas Habilidades/Superdotação e Dupla Excepcionalidade;Produto cheio;Produto cheio;3233,64;276,31;2957,33;CREDIT_CARD;12;
+2026-11-05 20:30;Neurociências da Aprendizagem e seus Transtornos;Produto cheio;Produto cheio;2700,00;257,01;2442,99;CREDIT_CARD;3;
+2026-11-05 20:44;Neurociências da Aprendizagem e seus Transtornos;Produto cheio;Produto cheio;3062,80;274,37;2788,43;CREDIT_CARD;8;
+2026-11-05 20:44;Neuropsicologia;Produto cheio;Produto cheio;382,85;40,39;342,46;CREDIT_CARD;8;
+2026-11-05 20:58;Neurociências e Autismo;Recorrência (*R);Mensal 12x;299,00;32,09;266,91;CREDIT_CARD;1;1
+2026-11-05 21:20;Neurociências e Autismo;Produto cheio;Produto cheio;2700,00;102,76;2597,24;CREDIT_CARD;3;
+2026-11-05 21:20;TDAH: avaliação e abordagens;Produto cheio;Produto cheio;2700,00;269,79;2430,21;PIX;1;
+2026-11-05 21:27;Altas Habilidades/Superdotação e Dupla Excepcionalidade;Recorrência (*R);Mensal 12x;299,00;32,09;266,91;CREDIT_CARD;1;1
+2026-11-05 21:28;Neurociências da Aprendizagem e seus Transtornos;Produto cheio;Produto cheio;3233,64;276,31;2957,33;CREDIT_CARD;12;
+2026-11-05 21:49;Neurociências e Autismo;Produto cheio;Produto cheio;3233,64;110,36;3123,28;CREDIT_CARD;12;
+2026-11-05 22:08;Neurociências da Aprendizagem e seus Transtornos;Recorrência (*R);Mensal 12x;299,00;32,09;266,91;CREDIT_CARD;1;1
+2026-11-05 22:27;Análise do Comportamento Aplicada (ABA) ao TEA;Produto cheio;Produto cheio;3147,50;275,35;2872,15;BILLET;10;
+2026-11-05 23:13;Neurociências e Autismo;Produto cheio;Produto cheio;2700,00;102,76;2597,24;CREDIT_CARD;3;
+2026-11-05 23:34;Neurociências e Autismo;Produto cheio;Produto cheio;3233,64;110,36;3123,28;BILLET;12;
+2026-11-06 07:34;Neurociências da Aprendizagem e seus Transtornos;Produto cheio;Produto cheio;3233,64;276,31;2957,33;CREDIT_CARD;12;
+2026-11-06 07:43;Neurociências e Autismo;Recorrência (*R);Mensal 12x;299,00;32,09;266,91;CREDIT_CARD;1;1
+2026-11-06 07:46;Altas Habilidades/Superdotação e Dupla Excepcionalidade;Produto cheio;Produto cheio;3233,64;276,31;2957,33;CREDIT_CARD;12;
+2026-11-06 07:49;Neurociências e Autismo;Produto cheio;Produto cheio;3233,64;110,36;3123,28;APPLE_PAY;12;
+2026-11-06 07:50;TDAH: avaliação e abordagens;Recorrência (*R);Mensal 12x;299,00;32,09;266,91;CREDIT_CARD;1;1
+2026-11-06 07:53;Neurociências e Autismo;Recorrência (*R);Mensal 12x;299,00;32,09;266,91;CREDIT_CARD;1;1
+2026-11-06 07:57;Neurociências e Autismo;Recorrência (*R);Mensal 12x;299,00;32,09;266,91;CREDIT_CARD;1;1
