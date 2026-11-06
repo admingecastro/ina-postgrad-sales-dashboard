@@ -1,0 +1,133 @@
+name: Atualizar dashboard Hotmart INA
+
+
+
+on:
+
+  schedule:
+  
+    - cron: '2,17,32,47 * * * *'
+    
+  workflow_dispatch:
+  
+
+
+permissions:
+
+  contents: read
+  
+  pages: write
+  
+  id-token: write
+  
+
+
+concurrency:
+
+  group: hotmart-dashboard-pages
+  
+  cancel-in-progress: true
+  
+
+
+jobs:
+
+  refresh-and-publish:
+  
+    if: github.repository == 'admingecastro/ina-postgrad-sales-dashboard'
+    
+    runs-on: ubuntu-latest
+    
+    timeout-minutes: 12
+    
+    environment:
+    
+      name: github-pages
+      
+      url: ${{ steps.deployment.outputs.page_url }}
+      
+    steps:
+    
+      - name: Baixar o código do dashboard
+      
+        uses: actions/checkout@v4
+        
+
+
+      - name: Preparar Python
+      
+        uses: actions/setup-python@v5
+        
+        with:
+        
+          python-version: '3.12'
+          
+
+
+      - name: Consultar Hotmart e gerar arquivos públicos sem dados pessoais
+      
+        env:
+        
+          INA_HOTMART_DASH_REFRESH_CLIENT_ID_20261106: ${{ secrets.INA_HOTMART_DASH_REFRESH_CLIENT_ID_20261106 }}
+          
+          INA_HOTMART_DASH_REFRESH_CLIENT_SECRET_20261106: ${{ secrets.INA_HOTMART_DASH_REFRESH_CLIENT_SECRET_20261106 }}
+          
+        run: python scripts/refresh_dashboard.py
+        
+
+
+      - name: Configurar GitHub Pages
+      
+        uses: actions/configure-pages@v5
+        
+
+
+      - name: Enviar artefato do site
+      
+        uses: actions/upload-pages-artifact@v3
+        
+        with:
+        
+          path: dist
+          
+
+
+      - name: Publicar dashboard
+      
+        id: deployment
+        
+        uses: actions/deploy-pages@v4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
