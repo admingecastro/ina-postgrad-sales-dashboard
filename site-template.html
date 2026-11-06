@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101420">
+<title>Dashboard de Vendas | Pós-graduações INA</title>
+<style>
+:root{--brand:#B08055;--brand-mid:#AC8B68;--brand-soft:#F5F1EC;--brand-wash:#FBF8F5;--navy:#101420;--ink:#101420;--muted:rgba(16,20,32,.62);--line:rgba(16,20,32,.11);--bg:#F5F1EC;--card:#FFFFFF;--blue:var(--brand);--teal:var(--brand-mid);--gold:var(--brand-mid);--shadow:0 1px 4px rgba(16,20,32,.035)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "DM Sans",Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:1480px;margin:0 auto;padding:24px 24px 42px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:22px;margin-bottom:16px}
+.eyebrow{color:var(--brand);font-weight:700;letter-spacing:.11em;text-transform:uppercase;font-size:10px}
+.top h1{font-size:28px;line-height:1.18;font-weight:650;letter-spacing:-.035em;margin:5px 0 6px;color:var(--navy)}
+.sub{color:var(--muted)}
+.updated{border:1px solid var(--line);background:rgba(255,255,255,.82);border-radius:11px;padding:10px 14px;color:var(--muted);font-size:11px;min-width:210px;box-shadow:none}
+.updated b{color:var(--navy);display:block;font-size:12px;margin-top:2px;font-weight:650}
+.filterbox{display:grid;grid-template-columns:1.1fr .7fr .7fr .7fr .7fr auto;gap:10px;align-items:end;background:var(--card);padding:14px;border:1px solid var(--line);border-radius:12px;box-shadow:none;margin-bottom:14px}
+.field label{display:block;font-size:10px;color:var(--muted);font-weight:650;margin:0 0 5px}
+.field select,.field input{height:38px;width:100%;border:1px solid var(--line);border-radius:8px;padding:0 10px;background:#fff;color:var(--navy);font:inherit;font-size:12px;transition:border-color .16s,box-shadow .16s}
+.field select:focus-visible,.field input:focus-visible,.right-filter select:focus-visible,.btn:focus-visible{outline:3px solid rgba(176,128,85,.18);outline-offset:1px;border-color:var(--brand)}
+.daterange{display:flex;gap:6px}
+.btn{height:38px;padding:0 15px;border:1px solid rgba(176,128,85,.28);background:var(--brand-soft);color:var(--navy);font-weight:650;border-radius:8px;cursor:pointer;transition:background .16s,border-color .16s}
+.btn:hover{background:#ECE1D5;border-color:rgba(176,128,85,.4)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:none;min-height:98px}
+.kpi .label{font-size:10px;letter-spacing:.035em;text-transform:uppercase;font-weight:650;color:var(--muted)}
+.kpi .value{font-size:22px;font-weight:650;letter-spacing:-.025em;color:var(--navy);margin:6px 0 3px}
+.kpi .hint{font-size:11px;color:var(--muted)}
+.kpi.accent,.kpi.blue,.kpi.gold{border-top:2px solid rgba(176,128,85,.52)}
+.section-intro{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:16px 2px 8px}
+.section-intro h2{font-size:14px;margin:0;color:var(--navy);font-weight:650}
+.section-intro span{font-size:11px;color:var(--muted)}
+.vgv-panel{margin:10px 0 16px}
+.vgv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.vgv-grid .kpi{min-height:100px}
+.vgv-grid .kpi:first-child{background:var(--brand-wash);border-color:rgba(176,128,85,.23)}
+.vgv-table{min-width:1100px}
+.vgv-table .total-row td{font-weight:700;background:var(--brand-wash)}
+.grid2{display:grid;grid-template-columns:1.25fr 1fr;gap:12px;margin:12px 0}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:none;min-width:0}
+.panel h2{font-size:15px;font-weight:650;margin:0;color:var(--navy);letter-spacing:-.01em}
+.panel .desc{font-size:11px;color:var(--muted);margin:3px 0 12px}
+.chart{width:100%;overflow:hidden}
+.chart svg{width:100%;height:auto;display:block}
+.chart-empty{padding:38px 10px;color:var(--muted);text-align:center;font-size:12px}
+.barlist{display:grid;gap:9px}
+.barrow{display:grid;grid-template-columns:minmax(140px,1.4fr) 2fr auto;gap:10px;align-items:center;font-size:11px}
+.barrow .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track{height:7px;background:rgba(16,20,32,.06);border-radius:99px;overflow:hidden}
+.fill{height:100%;background:var(--brand);border-radius:99px}
+.barrow .amount{font-weight:650;color:var(--navy);white-space:nowrap}
+.table-wrap{overflow:auto;max-height:510px;border:1px solid rgba(16,20,32,.08);border-radius:9px}
+.data-table{border-collapse:collapse;width:100%;font-size:11px;white-space:nowrap}
+.data-table th{position:sticky;top:0;background:#F9F7F4;text-align:left;padding:9px 10px;color:rgba(16,20,32,.68);font-size:9px;letter-spacing:.04em;text-transform:uppercase;z-index:1}
+.data-table td{padding:8px 10px;border-top:1px solid rgba(16,20,32,.07)}
+.data-table td.money{text-align:right;font-variant-numeric:tabular-nums}
+.data-table tbody tr:hover{background:#FCFAF8}
+.tag{display:inline-block;border-radius:999px;padding:3px 8px;background:var(--brand-soft);color:var(--brand);font-size:10px;font-weight:650}
+.tag.full{background:rgba(16,20,32,.055);color:var(--navy)}
+.tag.provisional{background:#F3E9DF;color:#8D6A4B}
+.section-title{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.right-filter{font-size:11px;display:flex;gap:8px;align-items:center;color:var(--muted)}
+.right-filter select{border:1px solid var(--line);border-radius:8px;padding:7px;background:white;color:var(--navy);font:inherit}
+.note{background:var(--brand-wash);border:1px solid rgba(176,128,85,.18);color:var(--muted);border-radius:10px;padding:10px 12px;margin:12px 0;font-size:11px}
+.note b{color:var(--navy)}
+.method-note{background:rgba(255,255,255,.62);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:14px 0;color:var(--muted)}
+.method-note summary{cursor:pointer;font-size:11px;font-weight:650;color:var(--navy);list-style-position:inside}
+.method-note summary::marker{color:var(--brand)}
+.method-copy{font-size:11px;line-height:1.6;margin:9px 0 2px}
+.method-copy p{margin:0}
+.meta{font-size:10px;color:var(--muted);margin-top:10px}
+.subgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.empty{padding:22px;color:var(--muted);text-align:center}
+.pill{font-size:10px;color:var(--muted);background:rgba(16,20,32,.045);padding:4px 8px;border-radius:99px}
+.footer{margin-top:16px;border-top:1px solid var(--line);padding-top:11px;color:var(--muted);font-size:10px}
+.download a{color:var(--brand);font-weight:650;text-decoration:none;margin-right:12px}
+.download a:hover{text-decoration:underline}
+@media(max-width:1150px){.filterbox{grid-template-columns:repeat(3,1fr)}.kpis{grid-template-columns:repeat(3,1fr)}.vgv-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:800px){.section-title{display:block}.section-title>.pill{display:inline-block;margin-top:6px;white-space:normal;max-width:100%}.wrap{padding:18px 12px 32px}.top{display:block}.updated{margin-top:10px}.grid2,.subgrid{grid-template-columns:1fr}.filterbox{grid-template-columns:repeat(2,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}.vgv-grid{grid-template-columns:repeat(2,1fr)}.kpi .value{font-size:20px}.barrow{grid-template-columns:1fr 1.2fr auto}}
+@media(max-width:470px){.wrap{padding:16px 10px 28px}.filterbox{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.vgv-grid{grid-template-columns:1fr 1fr}.kpi{padding:12px}.kpi .value{font-size:18px}.top h1{font-size:24px}.section-intro{display:block}.section-intro span{display:block;margin-top:3px}}
+
+/* Dicas interativas: hover, foco por teclado e toque */
+[data-tip]{cursor:help}
+.kpi[data-tip]{transition:border-color .15s ease,background .15s ease}
+.kpi[data-tip]:hover,.kpi[data-tip]:focus-visible{border-color:rgba(176,128,85,.46)}
+.chart rect[data-tip]:hover{filter:brightness(.92)}
+.barrow[data-tip]:hover .fill{filter:brightness(.92)}
+[data-tip]:focus-visible{outline:2px solid rgba(176,128,85,.62);outline-offset:2px}
+.dashboard-tooltip{position:fixed;z-index:10000;max-width:min(340px,calc(100vw - 24px));padding:9px 11px;border:1px solid rgba(255,255,255,.16);border-radius:8px;background:#101420;color:#fff;font:11px/1.5 "DM Sans",Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;white-space:pre-line;box-shadow:0 5px 22px rgba(16,20,32,.18);pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s ease,transform .12s ease}
+.dashboard-tooltip.is-visible{opacity:1;transform:translateY(0)}
+
+.arrears-panel{margin:14px 0}
+.arrears-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.arrears-grid .kpi{min-height:94px}
+.arrears-grid .kpi:first-child{background:var(--brand-wash);border-color:rgba(176,128,85,.24)}
+.arrears-table{min-width:760px}
+.arrears-table .total-row td{font-weight:700;background:var(--brand-wash)}
+.arrears-note{margin:10px 0 12px}
+@media(max-width:1150px){.arrears-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:470px){.arrears-grid{grid-template-columns:1fr 1fr}}
+.interaction-hint{display:block;margin-top:3px;font-size:11px;color:var(--muted)}
+
+.refresh-btn{margin-top:9px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}.refresh-btn:hover{color:#fff}.refresh-hint{margin-top:5px;font-size:10px;color:var(--muted)}.updated{min-width:250px}
+</style></head><body><div class="wrap">
+<header class="top"><div><div class="eyebrow">Hotmart · Pós-graduações INA</div><h1>Dashboard de vendas e recorrência</h1><div class="sub">Acompanhamento das 8 pós-graduações: produto cheio e ofertas de recorrência (*R).<span class="interaction-hint">Passe o cursor sobre gráficos, indicadores e linhas para ver detalhes; no celular, toque.</span></div></div><div class="updated">Última consulta Hotmart em<b id="updated"></b><div id="coverage"></div><a class="btn refresh-btn" href="https://github.com/admingecastro/ina-postgrad-sales-dashboard/actions/workflows/hotmart-refresh.yml" target="_blank" rel="noopener noreferrer">Atualizar agora</a><div class="refresh-hint">Execução manual · login no GitHub</div></div></header>
+<section class="filterbox">
+ <div class="field"><label for="period">Período de vendas</label><select id="period"><option value="week">Semana atual</option><option value="month" selected>Mês atual</option><option value="custom">Período personalizado</option></select></div>
+ <div class="field"><label for="start">De</label><input id="start" type="date"></div><div class="field"><label for="end">Até</label><input id="end" type="date"></div>
+ <div class="field"><label for="program">Pós-graduação</label><select id="program"><option value="all">Todas</option></select></div>
+ <div class="field"><label for="modality">Modalidade</label><select id="modality"><option value="all">Todas</option><option value="Produto cheio">Produto cheio</option><option value="Recorrência (*R)">Recorrência (*R)</option></select></div>
+ <button class="btn" id="apply">Aplicar filtros</button>
+</section>
+<section class="panel vgv-panel" id="vgvPanel"><div class="section-title"><div><h2>VGV da carteira</h2><div class="desc">Visão de toda a carteira, sem filtro de datas. Os filtros de pós-graduação e modalidade se aplicam.</div></div><span class="pill" id="vgvScope"></span></div><div class="vgv-grid" id="vgvCards"></div><div class="note" id="vgvComposition"></div><div class="table-wrap"><table class="data-table vgv-table"><thead><tr><th>Pós-graduação</th><th>Realizado aprovado</th><th>Aguardando (único)</th><th>Recorrência futura conciliada</th><th>Futuro (VGV − realizado)</th><th>VGV estimado</th><th>Provisório adicional</th><th>VGV potencial</th></tr></thead><tbody id="vgvBody"></tbody></table></div></section><div class="section-intro"><h2>Vendas no período</h2><span>Estes indicadores e gráficos seguem o filtro de datas selecionado.</span></div><section class="kpis" id="kpis"></section>
+
+<section class="grid2"><article class="panel"><h2>Faturamento aprovado por período</h2><div class="desc">Valor bruto da compra por data de aprovação, no período selecionado.</div><div class="field" style="max-width:180px;margin-bottom:8px"><label for="grain">Agrupar por</label><select id="grain"><option value="day">Dia</option><option value="week">Semana</option><option value="month">Mês</option></select></div><div id="salesChart" class="chart"></div></article>
+<article class="panel"><h2>Vendas por modalidade</h2><div class="desc">Comparação entre curso cheio e assinatura (*R), conforme os IDs do PDF.</div><div id="modalityChart"></div></article></section>
+<section class="grid2"><article class="panel"><h2>Desempenho por pós-graduação</h2><div class="desc">Vendas aprovadas, faturamento bruto e líquido estimado após taxa Hotmart.</div><div id="productChart" class="barlist"></div></article>
+<article class="panel"><div class="section-title"><h2>Recorrência futura estimada</h2><div class="right-filter">Horizonte<select id="horizon"><option value="30">30 dias</option><option value="90">90 dias</option><option value="365" selected>12 meses</option><option value="all">Todo o contrato</option></select></div></div><div class="desc">Próximas cobranças de assinaturas com status ACTIVE e data prevista na Hotmart.</div><div id="futureChart" class="chart"></div><div class="subgrid" style="margin-top:12px"><div class="kpi accent"><div class="label">Próximos 30 dias</div><div class="value" id="next30"></div><div class="hint">Bruto previsto · somente conciliadas</div></div><div class="kpi blue"><div class="label">Ciclos conciliados</div><div class="value" id="futureCycles"></div><div class="hint">No horizonte selecionado</div></div></div><div id="provisionalNote" class="meta"></div></article></section>
+
+<section class="panel arrears-panel" id="arrearsPanel"><div class="section-title"><div><h2>Controle de inadimplência — recorrências</h2><div class="desc">Situação informada pela Hotmart. O filtro de pós-graduação se aplica; período e modalidade não alteram este estado.</div></div><span class="pill" id="arrearsAsOf"></span></div><div class="arrears-grid" id="arrearsCards"></div><div class="note arrears-note" id="arrearsNote"></div><div class="table-wrap"><table class="data-table arrears-table"><thead><tr><th>Pós-graduação</th><th>Assinaturas ativas</th><th>Atrasadas na Hotmart</th><th>Falhas na 1ª cobrança</th></tr></thead><tbody id="arrearsBody"></tbody></table></div></section>
+<section class="panel" style="margin-top:14px"><div class="section-title"><div><h2>Vendas aprovadas</h2><div class="desc">Sem nomes, e-mails ou códigos pessoais. Use os filtros acima para analisar por data, pós e modalidade.</div></div><span class="pill" id="saleCountPill"></span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Aprovada em (BRT)</th><th>Pós-graduação</th><th>Modalidade</th><th>Plano</th><th>Pagamento</th><th>Parcelas checkout</th><th>Recorrência nº</th><th>Bruto</th><th>Taxa Hotmart</th><th>Líquido estimado</th></tr></thead><tbody id="salesBody"></tbody></table></div></section>
+
+<section class="panel" id="pendingPanel" style="margin-top:14px"><div class="section-title"><div><h2>Vendas aguardando pagamento</h2><div class="desc">Transações únicas por CPF/CNPJ e produto, sem dados pessoais. A Hotmart não trouxe data prevista de liquidação; por isso, ficam fora da agenda de recorrência.</div></div><span class="pill" id="pendingPill"></span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Pedido criado (BRT)</th><th>Pós-graduação</th><th>Modalidade</th><th>Status</th><th>Meio de pagamento</th><th>Valor bruto</th></tr></thead><tbody id="pendingBody"></tbody></table></div></section>
+<section class="panel" style="margin-top:14px"><div class="section-title"><div><h2>Agenda de recorrências previstas</h2><div class="desc">Cada linha é um ciclo futuro estimado. O valor é o total bruto do ciclo; parcelas do checkout são mostradas separadamente.</div></div><span class="pill" id="forecastPill"></span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Data prevista (BRT)</th><th>Pós-graduação</th><th>Plano</th><th>Conciliação</th><th>Referência</th><th>Ciclo</th><th>Valor bruto do ciclo</th><th>Parcelas do ciclo</th><th>Periodicidade</th></tr></thead><tbody id="forecastBody"></tbody></table></div></section>
+<details class="method-note"><summary>Premissas do VGV e da projeção recorrente</summary><div class="method-copy"><p><b>Metodologia de faturamento e VGV:</b> O faturamento bruto considerado soma vendas aprovadas e transações <code>WAITING_PAYMENT</code> deduplicadas por CPF/CNPJ e produto. Tentativas pendentes do mesmo comprador para um produto que já possui venda aprovada são excluídas; tentativas repetidas são consolidadas. Como a Hotmart não informa uma data de liquidação para transações pendentes, elas ficam separadas da agenda de recorrência. O VGV estimado principal = vendas aprovadas (realizado) + pagamentos pendentes únicos + saldo futuro de recorrências conciliadas. “Futuro (VGV − realizado)” é a diferença entre o VGV principal e o realizado. Assinaturas sem venda aprovada correspondente ficam classificadas como provisórias, fora do VGV principal; o VGV potencial as inclui separadamente. A projeção usa status, próxima cobrança, limite de ciclos e sequência de recorrência informados pela Hotmart; quando não há correspondência de venda, a sequência começa em 1 como hipótese provisória. Projeção não é garantia de recebimento: cancelamentos, falhas, reembolsos e ajustes podem alterar os valores. Para cobranças trimestrais e semestrais, o gráfico agenda o valor total do ciclo na data prevista e não distribui as parcelas do checkout pelos meses.</p></div></details>
+<div class="footer"><div id="method"></div><div class="download" style="margin-top:8px">Arquivos de apoio: <a href="vendas_aprovadas_pos_graduacoes_hotmart.csv" target="_blank" rel="noopener">Vendas aprovadas (CSV)</a><a href="previsao_recorrencia_pos_graduacoes_hotmart.csv" target="_blank" rel="noopener">Previsão de recorrência (CSV)</a><a href="resumo_vgv_pos_graduacoes_hotmart.csv" target="_blank" rel="noopener">Resumo de VGV (CSV)</a></div><div style="margin-top:8px">Consulta Hotmart automatizada a cada 15 minutos (sujeita a atrasos da fila do GitHub Actions). O botão “Atualizar agora” abre a execução manual e exige login no GitHub.</div></div>
+</div>
+<div id="dashboardTooltip" class="dashboard-tooltip" role="tooltip" aria-hidden="true"></div>
+<script>
+const D = __DATA__;
+const brl = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
+const num = new Intl.NumberFormat('pt-BR');
+const $ = id => document.getElementById(id);
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const tipAttr = s => esc(s).replace(/\n/g,'&#10;');
+let activeTip=null;
+function positionTip(el,event){
+ const box=$('dashboardTooltip'),r=el.getBoundingClientRect();
+ const x=event?event.clientX:r.left+r.width/2, y=event?event.clientY:r.top;
+ const b=box.getBoundingClientRect();
+ const left=Math.max(12,Math.min(innerWidth-b.width-12,x+12));
+ let top=y-b.height-12;if(top<12)top=Math.min(innerHeight-b.height-12,y+16);
+ box.style.left=`${left}px`;box.style.top=`${Math.max(12,top)}px`;
+}
+function showTip(el,event){
+ if(!el||!el.dataset.tip)return;
+ const box=$('dashboardTooltip');activeTip=el;box.textContent=el.dataset.tip;
+ box.classList.add('is-visible');box.setAttribute('aria-hidden','false');
+ el.setAttribute('aria-describedby','dashboardTooltip');
+ requestAnimationFrame(()=>{if(activeTip===el)positionTip(el,event)});
+}
+function hideTip(){
+ const box=$('dashboardTooltip');
+ if(activeTip)activeTip.removeAttribute('aria-describedby');
+ activeTip=null;box.classList.remove('is-visible');box.setAttribute('aria-hidden','true');
+}
+function bindInteractiveTips(){
+ document.addEventListener('pointerover',e=>{if(e.pointerType==='touch')return;const el=e.target.closest?.('[data-tip]');if(el)showTip(el,e)});
+ document.addEventListener('pointermove',e=>{if(activeTip&&e.pointerType!=='touch'&&e.target.closest?.('[data-tip]')===activeTip)positionTip(activeTip,e)});
+ document.addEventListener('pointerout',e=>{const el=e.target.closest?.('[data-tip]');if(el&&el===activeTip&&!el.contains(e.relatedTarget))hideTip()});
+ document.addEventListener('focusin',e=>{const el=e.target.closest?.('[data-tip]');if(el)showTip(el,null)});
+ document.addEventListener('focusout',e=>{const el=e.target.closest?.('[data-tip]');if(el&&el===activeTip&&!el.contains(e.relatedTarget))hideTip()});
+ document.addEventListener('click',e=>{
+  const el=e.target.closest?.('[data-tip]');
+  if(matchMedia('(hover: none)').matches){if(el){if(activeTip===el)hideTip();else showTip(el,null)}else hideTip()}
+ });
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')hideTip()});
+ window.addEventListener('scroll',hideTip,true);window.addEventListener('resize',hideTip);
+}
+
+function dateObj(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d,12,0,0)}
+function dateISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function weekStart(s){let d=dateObj(s);d.setDate(d.getDate()-((d.getDay()+6)%7));return dateISO(d)}
+function addDays(s,n){let d=dateObj(s);d.setDate(d.getDate()+n);return dateISO(d)}
+function init(){
+ $('updated').textContent=D.asOf; $('coverage').textContent=`Vendas: ${D.startDate} a ${D.endDate} · recorrências consultadas ${D.asOfSubscriptions}`;
+ D.programs.forEach(p=>{let o=document.createElement('option');o.value=p;o.textContent=p;$('program').appendChild(o)});
+ $('start').value=`${D.asOfDate.slice(0,7)}-01`; $('end').value=D.asOfDate;
+ $('period').addEventListener('change',()=>{if($('period').value==='week'){let s=weekStart(D.asOfDate);$('start').value=s;$('end').value=D.asOfDate}else if($('period').value==='month'){$('start').value=`${D.asOfDate.slice(0,7)}-01`;$('end').value=D.asOfDate}});
+ ['apply','program','modality','grain','horizon'].forEach(id=>$(id).addEventListener('click',render));
+ ['program','modality','grain','horizon'].forEach(id=>$(id).addEventListener('change',render));
+ $('method').textContent=`Fonte: API Hotmart · 16 IDs mapeados do PDF (8 cursos + 8 assinaturas) · ${D.summary.saleCount} vendas aprovadas + ${D.vgv.pendingUniqueCount} pagamento(s) aguardando único(s) por CPF/CNPJ · ${D.vgv.pendingDuplicatesExcluded} tentativa(s) repetida(s) excluída(s) · recorrências consultadas ${D.asOfSubscriptions} · taxas conforme o registro da venda.`;
+ render();
+}
+function selectedSales(){let s=$('start').value||D.startDate,e=$('end').value||D.endDate,p=$('program').value,m=$('modality').value;return D.sales.filter(x=>x.date>=s&&x.date<=e&&(p==='all'||x.program===p)&&(m==='all'||x.modality===m))}
+function selectedByProductAndModality(x){let p=$('program').value,m=$('modality').value;return (p==='all'||x.program===p)&&(m==='all'||x.modality===m)}
+function selectedPending(){let s=$('start').value||D.startDate,e=$('end').value||D.endDate;return (D.pendingSales||[]).filter(x=>x.date>=s&&x.date<=e&&selectedByProductAndModality(x))}
+function selectedFuture(){let p=$('program').value,m=$('modality').value,h=$('horizon').value;let cutoff=h==='all'?null:addDays(D.asOfDate,Number(h));return D.forecast.filter(x=>(p==='all'||x.program===p)&&(m==='all'||x.modality===m)&&(!cutoff||x.date<=cutoff))}
+function svgBars(rows, opts={}){if(!rows.length)return '<div class="chart-empty">Sem dados para os filtros selecionados.</div>';let W=760,H=250,L=62,R=16,T=14,B=44;let max=Math.max(1,...rows.map(r=>Number(r.value)||0));let n=rows.length;let slot=(W-L-R)/n;let bar=Math.min(42,slot*.62);let out=[`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfico de faturamento">`];for(let i=0;i<=4;i++){let y=T+(H-T-B)*i/4,val=max*(4-i)/4;out.push(`<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#E6E1DB"/>`);out.push(`<text x="${L-8}" y="${y+4}" text-anchor="end" fill="rgba(16,20,32,.56)" font-size="10">${esc(shortMoney(val))}</text>`)}rows.forEach((r,i)=>{let h=(Number(r.value)||0)/max*(H-T-B);let x=L+i*slot+(slot-bar)/2,y=H-B-h;out.push(`<rect x="${x}" y="${y}" width="${bar}" height="${Math.max(0,h)}" rx="5" fill="${opts.color||'#B08055'}" tabindex="0" focusable="true" role="img" aria-label="${esc([r.label,brl.format(r.value||0),r.count!==undefined?num.format(r.count)+' venda(s)':null].filter(Boolean).join(', '))}" data-tip="${tipAttr([r.label,brl.format(r.value||0),r.count!==undefined?num.format(r.count)+' venda(s)':null].filter(Boolean).join('\n'))}"><title>${esc(r.label)} · ${esc(brl.format(r.value||0))}</title></rect>`);let label=r.label.length>12?r.label.slice(0,11)+'…':r.label;out.push(`<text x="${L+i*slot+slot/2}" y="${H-B+18}" text-anchor="middle" fill="#AC8B68" font-size="10">${esc(label)}</text>`)});out.push('</svg>');return out.join('')}
+function shortMoney(v){if(v>=1000000)return `R$ ${(v/1000000).toFixed(1)} mi`;if(v>=1000)return `R$ ${(v/1000).toFixed(1)} mil`;return `R$ ${Math.round(v)}`}
+function sum(rows,key){return rows.reduce((a,r)=>a+(Number(r[key])||0),0)}
+function aggregate(rows, grain){let map={};rows.forEach(r=>{let key=r.date,label=key;if(grain==='week'){key=weekStart(r.date);label='Sem. '+key.split('-').reverse().join('/')}else if(grain==='month'){key=r.date.slice(0,7);label=key.split('-').reverse().join('/')}else label=key.slice(8,10)+'/'+key.slice(5,7);map[key]??={label,value:0,count:0};map[key].value+=r.gross;map[key].count++});return Object.keys(map).sort().map(k=>map[k])}
+function renderVgv(){let p=$('program').value,m=$('modality').value;let filter=a=>a.filter(selectedByProductAndModality);let sold=filter(D.sales),pending=filter(D.pendingSales||[]),future=filter(D.forecast.filter(x=>x.status==='Conciliada')),provisional=filter(D.forecast.filter(x=>x.status==='Provisória'));let realized=sum(sold,'gross'),pendingGross=sum(pending,'gross'),recFuture=sum(future,'gross'),futureOnly=pendingGross+recFuture,vgv=realized+futureOnly,provisionalGross=sum(provisional,'gross'),potential=vgv+provisionalGross;$('vgvScope').textContent='Sem filtro de datas · filtros de curso/modalidade aplicados';let cards=[['VGV total estimado',brl.format(vgv),'Realizado + pagamentos únicos pendentes + recorrências futuras conciliadas','accent'],['Vendas realizadas',brl.format(realized),'Vendas aprovadas no histórico Hotmart','blue'],['Futuro (VGV − realizado)',brl.format(futureOnly),'Recorrências futuras conciliadas + pagamentos aguardando','gold'],['VGV potencial',brl.format(potential),'Inclui '+brl.format(provisionalGross)+' em recorrências provisórias','']];$('vgvCards').innerHTML=cards.map(x=>`<div class="kpi ${x[3]}" tabindex="0" data-tip="${tipAttr([x[0],x[1],x[2]].join('\n'))}"><div class="label">${esc(x[0])}</div><div class="value">${esc(x[1])}</div><div class="hint">${esc(x[2])}</div></div>`).join('');$('vgvComposition').innerHTML=`No VGV estimado principal: ${esc(brl.format(recFuture))} de recorrências futuras conciliadas + ${esc(brl.format(pendingGross))} aguardando pagamento único. ${num.format(D.vgv.pendingDuplicatesExcluded)} tentativa(s) repetida(s) foram excluídas na deduplicação por CPF/CNPJ e produto. As recorrências provisórias (${esc(brl.format(provisionalGross))}) ficam fora do principal e aparecem somente no VGV potencial.`;let rows=D.programs.filter(name=>p==='all'||name===p).map(name=>{let ss=sold.filter(x=>x.program===name),pp=pending.filter(x=>x.program===name),ff=future.filter(x=>x.program===name),pr=provisional.filter(x=>x.program===name);let r=sum(ss,'gross'),q=sum(pp,'gross'),f=sum(ff,'gross'),futureValue=q+f,v=r+futureValue,prov=sum(pr,'gross');return{name,r,q,f,futureValue,v,prov,potential:v+prov}});let totals=rows.reduce((a,x)=>{for(let k of ['r','q','f','futureValue','v','prov','potential'])a[k]+=x[k];return a},{r:0,q:0,f:0,futureValue:0,v:0,prov:0,potential:0});let tr=x=>`<tr data-tip="${tipAttr([x.name,`Realizado aprovado ${brl.format(x.r)}`,`Aguardando pagamento ${brl.format(x.q)}`,`Recorrência futura conciliada ${brl.format(x.f)}`,`VGV estimado ${brl.format(x.v)}`,`VGV potencial ${brl.format(x.potential)}`].join('\n'))}"><td>${esc(x.name)}</td><td class="money">${esc(brl.format(x.r))}</td><td class="money">${esc(brl.format(x.q))}</td><td class="money">${esc(brl.format(x.f))}</td><td class="money">${esc(brl.format(x.futureValue))}</td><td class="money">${esc(brl.format(x.v))}</td><td class="money">${esc(brl.format(x.prov))}</td><td class="money">${esc(brl.format(x.potential))}</td></tr>`;$('vgvBody').innerHTML=rows.map(tr).join('')+tr({name:'TOTAL',...totals}).replace('<tr>','<tr class="total-row">')}
+
+function renderDelinquency(){
+ const selected=$('program').value;
+ const rows=D.delinquency.programs.filter(x=>selected==='all'||x.program===selected);
+ const active=rows.reduce((a,x)=>a+x.active,0);
+ const late=rows.reduce((a,x)=>a+x.late,0);
+ const first=rows.reduce((a,x)=>a+x.initialFailures,0);
+ const lateAmount=late?D.delinquency.lateAmount:0;
+ $('arrearsAsOf').textContent=`Consulta Hotmart · ${D.delinquency.asOf}`;
+ const cards=[
+  ['Atrasadas confirmadas',num.format(late),'Assinaturas classificadas como atrasadas pela Hotmart','late'],
+  ['Valor vencido confirmado',brl.format(lateAmount),'Somente cobranças recorrentes em atraso confirmado',''],
+  ['Assinaturas ativas',num.format(active),'No(s) produto(s) selecionado(s), na consulta Hotmart',''],
+  ['Falhas na 1ª cobrança',num.format(first),'Tentativas não pagas; não são inadimplência recorrente','']
+ ];
+ $('arrearsCards').innerHTML=cards.map(x=>`<div class="kpi ${x[3]}" tabindex="0" data-tip="${tipAttr([x[0],x[1],x[2]].join('\\n'))}"><div class="label">${esc(x[0])}</div><div class="value">${esc(x[1])}</div><div class="hint">${esc(x[2])}</div></div>`).join('');
+ $('arrearsNote').textContent=first?`${num.format(first)} tentativa(s) não paga(s) foram encontradas na primeira cobrança. Elas estavam em assinaturas inativas, sem ciclo pago (nº 1), e por isso ficam separadas de atraso recorrente e não entram no valor vencido.`:'A consulta não identificou recorrências atrasadas nos produtos selecionados. As falhas de primeira cobrança, se houver, são exibidas em separado e não são somadas como dívida recorrente.';
+ let tip=x=>[x.program,`${num.format(x.active)} ativas`,`${num.format(x.late)} atrasadas`,`${num.format(x.initialFailures)} falhas na primeira cobrança`].join('\\n');
+ const tr=x=>`<tr data-tip="${tipAttr(tip(x))}"><td>${esc(x.program)}</td><td class="money">${num.format(x.active)}</td><td class="money">${num.format(x.late)}</td><td class="money">${num.format(x.initialFailures)}</td></tr>`;
+ const total={program:'TOTAL',active,late,initialFailures:first};
+ $('arrearsBody').innerHTML=rows.map(tr).join('')+tr(total).replace('<tr ','<tr class="total-row" ');
+}
+
+function render(){let rows=selectedSales(),pendingRows=selectedPending(),future=selectedFuture(),confirmedFuture=future.filter(x=>x.status==='Conciliada'),provisionalFuture=future.filter(x=>x.status==='Provisória'),allFiltered=D.sales.filter(x=>($('program').value==='all'||x.program===$('program').value)&&($('modality').value==='all'||x.modality===$('modality').value));let month=D.asOfDate.slice(0,7);let mtd=allFiltered.filter(x=>x.date.slice(0,7)===month);let pendingMtd=(D.pendingSales||[]).filter(x=>x.date.slice(0,7)===month&&selectedByProductAndModality(x));let activeFiltered=D.activeSubscriptions.filter(x=>($('program').value==='all'||x.program===$('program').value)&&$('modality').value!=='Produto cheio');let next30=D.forecast.filter(x=>x.status==='Conciliada'&&x.date>=D.asOfDate&&x.date<=addDays(D.asOfDate,30)&&($('program').value==='all'||x.program===$('program').value)&&$('modality').value!=='Produto cheio');
+	 let grossPeriod=sum(rows,'gross')+sum(pendingRows,'gross'),grossMonth=sum(mtd,'gross')+sum(pendingMtd,'gross');
+ let kpis=[['Vendas aprovadas',num.format(rows.length),`no período · ${$('start').value} a ${$('end').value}`,'blue'],['Faturamento bruto',brl.format(grossPeriod),`aprovadas + ${num.format(pendingRows.length)} aguardando único(s)`,'accent'],['Faturamento no mês',brl.format(grossMonth),`aprovadas + ${num.format(pendingMtd.length)} aguardando pagamento`,'blue'],['Líquido estimado — aprovadas',brl.format(sum(rows,'net')),'bruto menos taxas Hotmart informadas',''],['Assinaturas ativas',num.format(activeFiltered.length),`${activeFiltered.filter(x=>x.has_approved_sale_match).length} conciliadas · ${activeFiltered.filter(x=>!x.has_approved_sale_match).length} provisórias`,'accent'],['A receber — próximos 30 dias',brl.format(sum(next30,'gross')),'somente ciclos recorrentes conciliados','gold']];
+ $('kpis').innerHTML=kpis.map(x=>`<div class="kpi ${x[3]}" tabindex="0" data-tip="${tipAttr([x[0],x[1],x[2]].join('\n'))}"><div class="label">${esc(x[0])}</div><div class="value">${esc(x[1])}</div><div class="hint">${esc(x[2])}</div></div>`).join('');
+	 renderVgv();
+ renderDelinquency();
+ let ag=aggregate(rows,$('grain').value);$('salesChart').innerHTML=svgBars(ag,{color:'#B08055'});
+ let full=rows.filter(x=>x.modality==='Produto cheio'),rec=rows.filter(x=>x.modality==='Recorrência (*R)');let mods=[{label:`Cheio · ${full.length} vendas`,value:sum(full,'gross')},{label:`Recorrência · ${rec.length} vendas`,value:sum(rec,'gross')}];$('modalityChart').innerHTML=mods.map((x,i)=>`<div class="barrow" tabindex="0" data-tip="${tipAttr([x.label,brl.format(x.value)].join('\n'))}" style="margin:18px 0"><div class="name">${esc(x.label)}</div><div class="track"><div class="fill" style="width:${Math.max(0,100*x.value/Math.max(1,...mods.map(y=>y.value)))}%;color:${i?'#AC8B68':'#B08055'}"></div></div><div class="amount">${esc(brl.format(x.value))}</div></div>`).join('')+`<div class="meta">Participação no faturamento do filtro: cheio ${sum(rows,'gross')?Math.round(100*sum(full,'gross')/sum(rows,'gross')):0}% · recorrência ${sum(rows,'gross')?Math.round(100*sum(rec,'gross')/sum(rows,'gross')):0}%.</div>`;
+ let by={};rows.forEach(x=>{by[x.program]??={name:x.program,count:0,gross:0,net:0};by[x.program].count++;by[x.program].gross+=x.gross;by[x.program].net+=x.net});let prod=Object.values(by).sort((a,b)=>b.gross-a.gross);let mx=Math.max(1,...prod.map(x=>x.gross));$('productChart').innerHTML=prod.length?prod.map(x=>`<div class="barrow" tabindex="0" data-tip="${tipAttr([x.name,`${num.format(x.count)} vendas aprovadas`, `Bruto ${brl.format(x.gross)}`, `Líquido estimado ${brl.format(x.net)}`].join('\n'))}"><div class="name" title="${esc(x.name)}">${esc(x.name)}</div><div class="track"><div class="fill" style="width:${100*x.gross/mx}%"></div></div><div class="amount">${esc(brl.format(x.gross))} <span style="color:rgba(16,20,32,.56);font-weight:400">· ${x.count}</span></div></div>`).join(''):'<div class="empty">Sem vendas aprovadas no período selecionado.</div>';
+ let months={};confirmedFuture.forEach(x=>{let k=x.date.slice(0,7);months[k]??={label:k.split('-').reverse().join('/'),value:0,count:0};months[k].value+=x.gross;months[k].count++});$('futureChart').innerHTML=svgBars(Object.keys(months).sort().map(k=>months[k]),{color:'#AC8B68'});
+ $('next30').textContent=brl.format(sum(next30,'gross'));$('futureCycles').textContent=num.format(confirmedFuture.length);$('next30').closest('.kpi').dataset.tip=['Próximos 30 dias',$('next30').textContent,'Somente ciclos recorrentes conciliados'].join('\n');$('futureCycles').closest('.kpi').dataset.tip=['Ciclos conciliados',$('futureCycles').textContent,'No horizonte selecionado'].join('\n');$('forecastPill').textContent=`${num.format(confirmedFuture.length)} conciliados + ${num.format(provisionalFuture.length)} provisórios · ${brl.format(sum(future,'gross'))}`;$('provisionalNote').textContent=provisionalFuture.length?`Provisório neste horizonte: ${new Set(provisionalFuture.map(x=>x.subscriptionRef)).size} assinatura(s), ${num.format(provisionalFuture.length)} ciclos, ${brl.format(sum(provisionalFuture,'gross'))}. Não incluído nos indicadores conciliados.`:'Sem assinaturas provisórias neste horizonte.';
+ $('saleCountPill').textContent=`${num.format(rows.length)} linhas · ${brl.format(sum(rows,'gross'))}`;
+ $('salesBody').innerHTML=rows.length?rows.map(x=>`<tr data-tip="${tipAttr([x.dateTime,x.program,x.modality,x.plan,`Bruto ${brl.format(x.gross)}`,`Taxa Hotmart ${brl.format(x.fee)}`,`Líquido estimado ${brl.format(x.net)}`].join('\n'))}"><td>${esc(x.dateTime)}</td><td>${esc(x.program)}</td><td><span class="tag ${x.modality==='Produto cheio'?'full':''}">${esc(x.modality)}</span></td><td>${esc(x.plan)}</td><td>${esc(x.paymentType)}</td><td>${x.installments}x</td><td>${x.recurrenceNumber??'—'}</td><td class="money">${esc(brl.format(x.gross))}</td><td class="money">${esc(brl.format(x.fee))}</td><td class="money">${esc(brl.format(x.net))}</td></tr>`).join(''):'<tr><td colspan="10" class="empty">Nenhuma venda aprovada nesse recorte.</td></tr>';
+	 $('pendingPill').textContent=`${num.format(pendingRows.length)} linha(s) única(s) · ${brl.format(sum(pendingRows,'gross'))}`;
+	 $('pendingBody').innerHTML=pendingRows.length?pendingRows.map(x=>`<tr data-tip="${tipAttr([x.dateTime,x.program,x.modality,'Aguardando pagamento',x.paymentType,`Bruto ${brl.format(x.gross)}`].join('\n'))}"><td>${esc(x.dateTime)}</td><td>${esc(x.program)}</td><td><span class="tag full">${esc(x.modality)}</span></td><td><span class="tag provisional">Aguardando pagamento</span></td><td>${esc(x.paymentType)}</td><td class="money">${esc(brl.format(x.gross))}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">Nenhum pagamento aguardando no período e nos filtros selecionados.</td></tr>';
+ $('forecastBody').innerHTML=future.length?future.map(x=>`<tr data-tip="${tipAttr([x.dateTime,x.program,x.plan,x.status,`Ciclo ${x.cycle} de ${x.maxCycles}`,`Valor bruto ${brl.format(x.gross)}`,`Parcelas ${x.installments}x`,x.cycleSource].join('\n'))}"><td>${esc(x.dateTime)}</td><td>${esc(x.program)}</td><td><span class="tag">${esc(x.plan)}</span></td><td><span class="tag ${x.status==='Provisória'?'provisional':''}">${esc(x.status)}</span></td><td>${esc(x.subscriptionRef)}</td><td>${x.cycle}/${x.maxCycles}</td><td class="money">${esc(brl.format(x.gross))}</td><td>${x.installments>1?`${x.installments}x no checkout`:'1x'}</td><td>${x.periodDays===90?'90 dias':'30 dias'}</td></tr>`).join(''):'<tr><td colspan="9" class="empty">Nenhuma cobrança futura estimada para os filtros selecionados.</td></tr>';
+}
+init();
+bindInteractiveTips();
+</script></body></html>
