@@ -98,9 +98,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "DM Sans",Inte
 @media(max-width:470px){.arrears-grid{grid-template-columns:1fr 1fr}}
 .interaction-hint{display:block;margin-top:3px;font-size:11px;color:var(--muted)}
 
-.refresh-btn{margin-top:9px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}.refresh-btn:hover{color:#fff}.refresh-hint{margin-top:5px;font-size:10px;color:var(--muted)}.updated{min-width:250px}
+.refresh-btn{margin-top:9px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}.refresh-btn:hover{color:#fff}.refresh-btn:disabled{opacity:.62;cursor:wait}.refresh-hint{margin-top:5px;font-size:10px;color:var(--muted)}.updated{min-width:250px}
 </style></head><body><div class="wrap">
-<header class="top"><div><div class="eyebrow">Hotmart · Pós-graduações INA</div><h1>Dashboard de vendas e recorrência</h1><div class="sub">Acompanhamento das 8 pós-graduações: produto cheio e ofertas de recorrência (*R).<span class="interaction-hint">Passe o cursor sobre gráficos, indicadores e linhas para ver detalhes; no celular, toque.</span></div></div><div class="updated">Última consulta Hotmart em<b id="updated"></b><div id="coverage"></div><a class="btn refresh-btn" href="https://github.com/admingecastro/ina-postgrad-sales-dashboard/actions/workflows/hotmart-refresh.yml" target="_blank" rel="noopener noreferrer">Atualizar agora</a><div class="refresh-hint">Execução manual · login no GitHub</div></div></header>
+<header class="top"><div><div class="eyebrow">Hotmart · Pós-graduações INA</div><h1>Dashboard de vendas e recorrência</h1><div class="sub">Acompanhamento das 8 pós-graduações: produto cheio e ofertas de recorrência (*R).<span class="interaction-hint">Passe o cursor sobre gráficos, indicadores e linhas para ver detalhes; no celular, toque.</span></div></div><div class="updated">Última consulta Hotmart em<b id="updated"></b><div id="coverage"></div><button type="button" class="btn refresh-btn" id="refreshBtn">Atualizar agora</button><div class="refresh-hint" id="refreshStatus" role="status" aria-live="polite">Botão público · limite global de uma atualização manual a cada 15 minutos.</div></div></header>
 <section class="filterbox">
  <div class="field"><label for="period">Período de vendas</label><select id="period"><option value="week">Semana atual</option><option value="month" selected>Mês atual</option><option value="custom">Período personalizado</option></select></div>
  <div class="field"><label for="start">De</label><input id="start" type="date"></div><div class="field"><label for="end">Até</label><input id="end" type="date"></div>
@@ -121,11 +121,12 @@ body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "DM Sans",Inte
 <section class="panel" id="pendingPanel" style="margin-top:14px"><div class="section-title"><div><h2>Vendas aguardando pagamento</h2><div class="desc">Transações únicas por CPF/CNPJ e produto, sem dados pessoais. A Hotmart não trouxe data prevista de liquidação; por isso, ficam fora da agenda de recorrência.</div></div><span class="pill" id="pendingPill"></span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Pedido criado (BRT)</th><th>Pós-graduação</th><th>Modalidade</th><th>Status</th><th>Meio de pagamento</th><th>Valor bruto</th></tr></thead><tbody id="pendingBody"></tbody></table></div></section>
 <section class="panel" style="margin-top:14px"><div class="section-title"><div><h2>Agenda de recorrências previstas</h2><div class="desc">Cada linha é um ciclo futuro estimado. O valor é o total bruto do ciclo; parcelas do checkout são mostradas separadamente.</div></div><span class="pill" id="forecastPill"></span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Data prevista (BRT)</th><th>Pós-graduação</th><th>Plano</th><th>Conciliação</th><th>Referência</th><th>Ciclo</th><th>Valor bruto do ciclo</th><th>Parcelas do ciclo</th><th>Periodicidade</th></tr></thead><tbody id="forecastBody"></tbody></table></div></section>
 <details class="method-note"><summary>Premissas do VGV e da projeção recorrente</summary><div class="method-copy"><p><b>Metodologia de faturamento e VGV:</b> O faturamento bruto considerado soma vendas aprovadas e transações <code>WAITING_PAYMENT</code> deduplicadas por CPF/CNPJ e produto. Tentativas pendentes do mesmo comprador para um produto que já possui venda aprovada são excluídas; tentativas repetidas são consolidadas. Como a Hotmart não informa uma data de liquidação para transações pendentes, elas ficam separadas da agenda de recorrência. O VGV estimado principal = vendas aprovadas (realizado) + pagamentos pendentes únicos + saldo futuro de recorrências conciliadas. “Futuro (VGV − realizado)” é a diferença entre o VGV principal e o realizado. Assinaturas sem venda aprovada correspondente ficam classificadas como provisórias, fora do VGV principal; o VGV potencial as inclui separadamente. A projeção usa status, próxima cobrança, limite de ciclos e sequência de recorrência informados pela Hotmart; quando não há correspondência de venda, a sequência começa em 1 como hipótese provisória. Projeção não é garantia de recebimento: cancelamentos, falhas, reembolsos e ajustes podem alterar os valores. Para cobranças trimestrais e semestrais, o gráfico agenda o valor total do ciclo na data prevista e não distribui as parcelas do checkout pelos meses.</p></div></details>
-<div class="footer"><div id="method"></div><div class="download" style="margin-top:8px">Arquivos de apoio: <a href="vendas_aprovadas_pos_graduacoes_hotmart.csv" target="_blank" rel="noopener">Vendas aprovadas (CSV)</a><a href="previsao_recorrencia_pos_graduacoes_hotmart.csv" target="_blank" rel="noopener">Previsão de recorrência (CSV)</a><a href="resumo_vgv_pos_graduacoes_hotmart.csv" target="_blank" rel="noopener">Resumo de VGV (CSV)</a></div><div style="margin-top:8px">Consulta Hotmart automatizada a cada 15 minutos (sujeita a atrasos da fila do GitHub Actions). O botão “Atualizar agora” abre a execução manual e exige login no GitHub.</div></div>
+<div class="footer"><div id="method"></div><div class="download" style="margin-top:8px">Arquivos de apoio: <a href="vendas_aprovadas_pos_graduacoes_hotmart.csv" target="_blank" rel="noopener">Vendas aprovadas (CSV)</a><a href="previsao_recorrencia_pos_graduacoes_hotmart.csv" target="_blank" rel="noopener">Previsão de recorrência (CSV)</a><a href="resumo_vgv_pos_graduacoes_hotmart.csv" target="_blank" rel="noopener">Resumo de VGV (CSV)</a></div><div style="margin-top:8px">Consulta Hotmart automatizada a cada 15 minutos. O botão público solicita uma nova consulta sem login no GitHub; disparos manuais respeitam um limite global de 15 minutos. A publicação pode levar alguns minutos.</div></div>
 </div>
 <div id="dashboardTooltip" class="dashboard-tooltip" role="tooltip" aria-hidden="true"></div>
 <script>
 const D = __DATA__;
+const REFRESH_WEBHOOK_URL = __REFRESH_WEBHOOK_URL__;
 const brl = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
 const num = new Intl.NumberFormat('pt-BR');
 const $ = id => document.getElementById(id);
@@ -166,11 +167,55 @@ function bindInteractiveTips(){
  window.addEventListener('scroll',hideTip,true);window.addEventListener('resize',hideTip);
 }
 
+function setupRefreshButton(){
+ const button=$('refreshBtn'),status=$('refreshStatus');
+ button.addEventListener('click',async()=>{
+  if(button.disabled)return;
+  button.disabled=true;
+  const previousSnapshot=D.asOf;
+  status.textContent='Enviando solicitação pública…';
+  try{
+   await fetch(REFRESH_WEBHOOK_URL,{method:'GET',mode:'no-cors',cache:'no-store',credentials:'omit'});
+   status.textContent='Solicitação enviada. O painel será recarregado quando os novos dados forem publicados; o limite global é uma atualização a cada 15 minutos.';
+   const started=Date.now();
+   const check=async()=>{
+    if(Date.now()-started>20*60*1000){
+     status.textContent='Solicitação enviada. A publicação pode levar mais alguns minutos; você pode recarregar esta página depois.';
+     button.disabled=false;
+     return;
+    }
+    try{
+     const url=new URL(location.href);url.searchParams.set('_snapshot_check',String(Date.now()));
+     const response=await fetch(url.href,{cache:'no-store'});
+     if(response.ok){
+      const page=await response.text();
+      const match=page.match(/const D = (\{[\s\S]*?\});\s*const REFRESH_WEBHOOK_URL/);
+      if(match){
+       const latest=JSON.parse(match[1]);
+       if(latest.asOf&&latest.asOf!==previousSnapshot){
+        status.textContent=`Atualização publicada em ${latest.asOf}. Recarregando…`;
+        location.reload();
+        return;
+       }
+      }
+     }
+    }catch{}
+    setTimeout(check,20000);
+   };
+   setTimeout(check,20000);
+  }catch{
+   status.textContent='Não foi possível enviar a solicitação. Tente novamente mais tarde.';
+   button.disabled=false;
+  }
+ });
+}
+
 function dateObj(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d,12,0,0)}
 function dateISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function weekStart(s){let d=dateObj(s);d.setDate(d.getDate()-((d.getDay()+6)%7));return dateISO(d)}
 function addDays(s,n){let d=dateObj(s);d.setDate(d.getDate()+n);return dateISO(d)}
 function init(){
+ setupRefreshButton();
  $('updated').textContent=D.asOf; $('coverage').textContent=`Vendas: ${D.startDate} a ${D.endDate} · recorrências consultadas ${D.asOfSubscriptions}`;
  D.programs.forEach(p=>{let o=document.createElement('option');o.value=p;o.textContent=p;$('program').appendChild(o)});
  $('start').value=`${D.asOfDate.slice(0,7)}-01`; $('end').value=D.asOfDate;

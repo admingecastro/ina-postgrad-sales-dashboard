@@ -24,6 +24,7 @@ OUT_DIR = ROOT / "dist"
 TZ = ZoneInfo("America/Sao_Paulo")
 API_BASE = "https://developers.hotmart.com/payments/api/v1"
 AUTH_URL = "https://api-sec-vlc.hotmart.com/security/oauth/token"
+REFRESH_WEBHOOK_URL = "https://api.manus.im/api/webhook/triggers/ae18b720-3934-4c6d-af57-13f7224ebb26"
 MAX_RESULTS = 50
 MAX_PAGES = 100
 CENT = Decimal("0.01")
@@ -806,10 +807,10 @@ def render_site(data: dict) -> None:
     if not TEMPLATE.exists():
         raise RuntimeError("Template do dashboard ausente.")
     template = TEMPLATE.read_text(encoding="utf-8")
-    if template.count("__DATA__") != 1:
-        raise RuntimeError("Placeholder de dados não encontrado de forma única no template.")
+    if template.count("__DATA__") != 1 or template.count("__REFRESH_WEBHOOK_URL__") != 1:
+        raise RuntimeError("Placeholders necessários não encontrados de forma única no template.")
     serialized = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
-    html = template.replace("__DATA__", serialized)
+    html = template.replace("__DATA__", serialized).replace("__REFRESH_WEBHOOK_URL__", json.dumps(REFRESH_WEBHOOK_URL))
     # Defensive privacy guard: identifiers and buyer records are never allowed in public data.
     payload = json.dumps(data, ensure_ascii=False).lower()
     forbidden_fields = ("buyer_email", "subscriber_email", "buyer_name", "subscriber_name", "subscriber_code", "transaction_internal", "buyer_ucode_internal", "cpf", "cnpj", "documents")
